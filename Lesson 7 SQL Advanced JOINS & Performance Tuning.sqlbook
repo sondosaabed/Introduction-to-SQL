@@ -1,0 +1,75 @@
+-- SQLBook: Markup
+In this lesson I learn about Advanced Joins 
+-- SQLBook: Markup
+Quiz: FULL OUTER JOIN
+Finding Matched and Unmatched Rows with FULL OUTER JOIN
+
+You’re not likely to use FULL JOIN (which can also be written as FULL OUTER JOIN) too often, but the syntax is worth practicing anyway. LEFT JOIN and RIGHT JOIN each return unmatched rows from one of the tables—FULL JOIN returns unmatched rows from both tables. FULL JOIN is commonly used in conjunction with aggregations to understand the amount of overlap between two tables.
+
+Say you're an analyst at Parch & Posey and you want to see:
+
+    each account who has a sales rep and each sales rep that has an account (all of the columns in these returned rows will be full)
+    but also each account that does not have a sales rep and each sales rep that does not have an account (some of the columns in these returned rows will be empty)
+
+This type of question is rare, but FULL OUTER JOIN is perfect for it. In the following SQL Explorer, write a query with FULL OUTER JOIN to fit the above described Parch & Posey scenario (selecting all of the columns in both of the relevant tables, accounts and sales_reps) then answer the subsequent multiple-choice quiz.
+-- SQLBook: Code
+SELECT *
+  FROM accounts
+ FULL JOIN sales_reps ON 
+ accounts.sales_rep_id = sales_reps.id
+WHERE accounts.sales_rep_id IS NULL 
+OR sales_reps.id IS NULL
+-- SQLBook: Markup
+Quiz: JOINs with Comparison Operators
+Inequality JOINs
+
+The query in Derek's video was pretty long. Let's now use a shorter query to showcase the power of joining with comparison operators.
+
+Inequality operators (a.k.a. comparison operators) don't only need to be date times or numbers, they also work on strings! You'll see how this works by completing the following quiz, which will also reinforce the concept of joining with comparison operators.
+
+In the following SQL Explorer, write a query that left joins the accounts table and the sales_reps tables on each sale rep's ID number and joins it using the < comparison operator on accounts.primary_poc and sales_reps.name, like so:
+
+accounts.primary_poc < sales_reps.name
+
+The query results should be a table with three columns: the account name (e.g. Johnson Controls), the primary contact name (e.g. Cammy Sosnowski), and the sales representative's name (e.g. Samuel Racine). Then answer the subsequent multiple-choice question.
+-- SQLBook: Code
+SELECT accounts.name as account_name,
+       accounts.primary_poc as poc_name,
+       sales_reps.name as sales_rep_name
+  FROM accounts
+  LEFT JOIN sales_reps
+    ON accounts.sales_rep_id = sales_reps.id
+   AND accounts.primary_poc < sales_reps.name
+-- SQLBook: Markup
+Quiz: Self JOINs
+
+One of the most common use cases for self JOINs is in cases where two events occurred, one after another. As you may have noticed in the previous video, using inequalities in conjunction with self JOINs is common.
+
+Modify the query from the previous video, which is pre-populated in the SQL Explorer below, to perform the same interval analysis except for the web_events table. Also:
+
+    change the interval to 1 day to find those web events that occurred after, but not more than 1 day after, another web event
+    add a column for the channel variable in both instances of the table in your query
+-- SQLBook: Code
+SELECT we1.id AS we_id,
+       we1.account_id AS we1_account_id,
+       we1.occurred_at AS we1_occurred_at,
+       we1.channel AS we1_channel,
+       we2.id AS we2_id,
+       we2.account_id AS we2_account_id,
+       we2.occurred_at AS we2_occurred_at,
+       we2.channel AS we2_channel
+  FROM web_events we1 
+ LEFT JOIN web_events we2
+   ON we1.account_id = we2.account_id
+  AND we1.occurred_at > we2.occurred_at
+  AND we1.occurred_at <= we2.occurred_at + INTERVAL '1 day'
+ORDER BY we1.account_id, we2.occurred_at
+-- SQLBook: Markup
+Quiz: UNION
+Appending Data via UNION
+
+Write a query that uses UNION ALL on two instances (and selecting all columns) of the accounts table. Then inspect the results and answer the subsequent quiz.
+-- SQLBook: Code
+SELECT * FROM accounts
+UNION ALL 
+SELECT * FROM accounts
