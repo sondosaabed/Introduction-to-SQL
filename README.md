@@ -1,5 +1,6 @@
 # Introduction-to-SQL
 Learned SQL fundamentals such as JOINs, aggregations, and subqueries. Learn how to use SQL to answer complex business problems.
+![image](https://github.com/sondosaabed/NanoDegree-Data-Science-with-Python/assets/65151701/3bf6a336-de4c-4b7e-8261-60ebf6dadc14)
 
 ## Project Work
 In this project, I worked with a relational database while working with SQL. Completed the entire data analysis process, starting by posing a question, running appropriate SQL queries to answer
